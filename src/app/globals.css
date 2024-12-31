@@ -19,3 +19,20 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.custom-checkbox {
+  @apply appearance-none w-6 h-6 border-2 border-gray-500 rounded-md bg-dark-6 relative cursor-pointer;
+}
+
+.custom-checkbox:checked {
+  @apply bg-blue-500 border-blue-500;
+}
+
+.custom-checkbox:checked::before {
+  content: '✓'; /* Custom checkmark */
+  @apply text-white absolute inset-0 flex items-center justify-center;
+}
+
+.custom-checkbox:focus {
+  @apply outline-none ring-2 ring-blue-300;
+}
