@@ -7,7 +7,7 @@ import { useAuth } from '../lib/authContext';
 import { useEffect, useState } from 'react';
 import VisionInputForm from '@/components/Vision/VisionInputForm';
 import { fsListenToVisions, fsAddVision, fsDeleteVision, fsUpdateVision } from '../lib/firestore';
-import TopNavbar from '@/components/TopNavbar';
+import TopNavbar from '@/components/TasksTopNavbar';
 export default function Vision() {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [visions, setVisions] = useState([]);

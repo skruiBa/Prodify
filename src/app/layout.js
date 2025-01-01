@@ -24,7 +24,6 @@ export default function RootLayout({ children }) {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </head>
         <body className={`${comfortaa.className}  antialiased bg-background flex h-screen`}>
-          {/* left side navbar */}
           <AuthProvider>
             <div className="h-screen w-screen flex">
               {/* Left Sidebar */}

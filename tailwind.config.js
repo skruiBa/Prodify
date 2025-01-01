@@ -20,10 +20,9 @@ module.exports = {
         'dark-8': '#0f0f0f', // Almost black
         'dark-9': '#0a0a0a', // Very close to pitch black
         'dark-10': '#050505',
-        primary: '#978CF5',
-        background: '#121721',
-        text: 'F4F4F4',
-        backgroundlight: '#20202B'
+        primary: '#7092C2',
+        background: '#181818',
+        backgroundlight: '#202020'
       }
     }
   },
