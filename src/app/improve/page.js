@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Button from '@/components/Button';
 import PageWrapper from '@/components/PageWrapper';
-import TopNavbar from '@/components/TopNavbar';
+import TopNavbar from '@/components/TasksTopNavbar';
 
 export default function Improve() {
   const [input, setInput] = useState('');
