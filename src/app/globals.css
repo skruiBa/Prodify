@@ -17,22 +17,17 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .custom-checkbox {
-  @apply appearance-none w-6 h-6 border-2 border-gray-500 rounded-md bg-dark-6 relative cursor-pointer;
+  @apply appearance-none w-8 h-8 border-4 border-primary rounded-full bg-backgroundlight cursor-pointer flex items-center justify-center;
 }
 
 .custom-checkbox:checked {
-  @apply bg-blue-500 border-blue-500;
-}
-
-.custom-checkbox:checked::before {
-  content: '✓'; /* Custom checkmark */
-  @apply text-white absolute inset-0 flex items-center justify-center;
+  @apply bg-primary;
 }
 
 .custom-checkbox:focus {
-  @apply outline-none ring-2 ring-blue-300;
+  @apply outline-none;
 }
+/* C:\programming projects\habit-tracker\src\assets\checkmark.svg */

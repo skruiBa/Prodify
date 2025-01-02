@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { formatDate, getDayName } from '@/app/lib/helper';
 
 export default function TasksTopNavbar({ currentDate }) {
+  if (!currentDate) return null;
   const pathname = usePathname();
 
   return (
@@ -25,40 +26,40 @@ const DateNavigator = ({ currentDate }) => {
   const dayClassName = 'text-center';
   const offDayClassName = 'text-white/50';
 
-  // Calculate previous and next dates
-  const previousDate = new Date(currentDate);
-  previousDate.setDate(previousDate.getDate() - 1);
-
-  const nextDate = new Date(currentDate);
-  nextDate.setDate(nextDate.getDate() + 1);
-
+  const generateFutureDates = (startDate, daysCount) => {
+    const dates = [];
+    for (let i = 1; i <= daysCount; i++) {
+      const newDate = new Date(startDate);
+      newDate.setDate(newDate.getDate() + i);
+      dates.push(newDate);
+    }
+    return dates;
+  };
+  const futureDates = generateFutureDates(currentDate, 5); // Get 5 future dates
   return (
     <div className="flex flex-row items-center gap-8">
       {/* Left Navigation arrow */}
-      <div>
+      <button>
         <p>← </p>
-      </div>
-      {/* Left (Previous Day) */}
-      <div className={`${dayClassName} ${offDayClassName}`}>
-        <p>{getDayName(previousDate)}</p>
-        <p>{formatDate(previousDate.toLocaleDateString())}</p>
-      </div>
+      </button>
+
       {/* Middle (Current Day) */}
       <div className={dayClassName}>
-        <p>{getDayName(new Date(currentDate))}</p>
-        <p>{formatDate(new Date(currentDate))}</p>
+        <p>{getDayName(currentDate)}</p>
+        <p>{formatDate(currentDate)}</p>
       </div>
-      {/* Right (Next Day) */}
-      <div className={`${dayClassName} ${offDayClassName}`}>
-        <p>{getDayName(nextDate)}</p>
-        <p>{formatDate(nextDate.toLocaleDateString())}</p>
+
+      {/* Future Dates */}
+      <div className="flex flex-row gap-4">
+        {futureDates.map((date, index) => (
+          <div key={index} className={dayClassName}>
+            <p>{getDayName(date)}</p>
+            <p>{formatDate(date)}</p>
+          </div>
+        ))}
       </div>
       {/* Right Navigation arrow */}
-      <button
-        onClick={() => {
-          console.log('Right arrow clicked');
-        }}
-      >
+      <button>
         <p>→</p>
       </button>
     </div>

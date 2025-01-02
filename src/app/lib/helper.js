@@ -6,12 +6,10 @@ export function formatTime(date) {
   return `${hours}:${minutes}`;
 }
 
-export const formatDate = ({ date }) => {
+export const formatDate = (date) => {
   if (!date) return null;
 
-  console.log('formatDate called with date:', date);
-
-  const dateReturn = date?.toLocaleDateString('en-FI', {
+  const dateReturn = date.toLocaleDateString('en-FI', {
     day: 'numeric',
     month: 'numeric',
     year: 'numeric'
@@ -20,4 +18,12 @@ export const formatDate = ({ date }) => {
   return dateReturn;
 };
 
-export const getDayName = ({ date }) => new Intl.DateTimeFormat('en-FI', { weekday: 'long' }).format(date);
+export const formatDateForFirebase = (date) => {
+  if (!date) return null;
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+export const getDayName = (date) => new Intl.DateTimeFormat('en-FI', { weekday: 'long' }).format(date);

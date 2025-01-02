@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import PageWrapper from '@/components/PageWrapper';
 import Button from '@/components/Button';
 import { useAuth } from '@/app/lib/authContext';
-import { formatDate, formatTime, debounce } from '@/app/lib/helper';
+import { formatDate, formatTime, debounce, formatDateForFirebase } from '@/app/lib/helper';
 import { fsListenToTasksByDate, fsAddTask, fsUpdateTask, fsDeleteTask } from '@/app/lib/firestore';
-import TasksTopNavbar from '@/components/TasksTopNavbar';
+import TasksTopNavbar from '@/components/Task/TasksTopNavbar';
 import TaskList from '@/components/Task/TaskList';
 import PrimaryButton from '@/components/PrimaryButton';
 import PlusIcon from '@/assets/plus.svg';
@@ -27,12 +27,14 @@ export default function TaskPage() {
   useEffect(() => {
     if (!currentDate || !user) return;
 
-    // const formattedDate = currentDate.toISOString().split('T')[0];
-    const unsubscribe = fsListenToTasksByDate(user.uid, currentDate, setTasks);
+    const formattedDate = formatDateForFirebase(currentDate);
+    const unsubscribe = fsListenToTasksByDate(user.uid, formattedDate, setTasks);
 
-    console.log('Listening to tasks for date:', currentDate);
+    console.log('Listening to tasks for date:', formatDateForFirebase(currentDate));
 
     return () => {
+      console.log('typeof unsubscribe:', typeof unsubscribe);
+
       if (typeof unsubscribe === 'function') unsubscribe();
     };
   }, [currentDate, user]);
