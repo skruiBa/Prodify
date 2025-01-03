@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import CheckmarkIcon from '@/assets/checkmark.svg';
 export default function TaskList({ tasks }) {
-  // if (!tasks) return null;
+  if (!tasks) return null;
 
   return (
     <ul className="flex flex-col gap-4">

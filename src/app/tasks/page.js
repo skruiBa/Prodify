@@ -11,16 +11,16 @@ import TaskList from '@/components/Task/TaskList';
 import PrimaryButton from '@/components/PrimaryButton';
 import PlusIcon from '@/assets/plus.svg';
 import SecondaryButton from '@/components/SecondaryButton';
+import { useDate } from '../lib/dateContext';
 
 export default function TaskPage() {
-  // State variables
-  const [currentDate, setCurrentDate] = useState(null);
+  const { currentDate, updateCurrentDate } = useDate();
   const [tasks, setTasks] = useState([]);
   const { user } = useAuth();
 
   // Set current date on client-side after hydration
   useEffect(() => {
-    setCurrentDate(new Date());
+    updateCurrentDate(new Date());
   }, []);
 
   // Firestore Snapshot listener
@@ -33,18 +33,16 @@ export default function TaskPage() {
     console.log('Listening to tasks for date:', formatDateForFirebase(currentDate));
 
     return () => {
-      console.log('typeof unsubscribe:', typeof unsubscribe);
-
       if (typeof unsubscribe === 'function') unsubscribe();
     };
   }, [currentDate, user]);
 
   return (
     <>
-      <TasksTopNavbar currentDate={currentDate}>meowww</TasksTopNavbar>
+      <TasksTopNavbar>meowww</TasksTopNavbar>
       <PageWrapper>
         <h1>Tasks</h1>
-        <TaskList />
+        {/* <TaskList tasks={tasks}/> */}
         <PrimaryButton>
           <PlusIcon fill="black" />
           Get Started
