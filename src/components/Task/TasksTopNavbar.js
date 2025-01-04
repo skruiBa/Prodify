@@ -39,9 +39,7 @@ export default function TasksTopNavbar({}) {
       </div>
 
       {/* Right section */}
-      <div>
-        <PrimaryButton onClick={() => {}}></PrimaryButton>
-      </div>
+      <div>{/* <PrimaryButton onClick={() => {}}></PrimaryButton> */}</div>
     </nav>
   );
 }
