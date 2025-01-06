@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
                   {/* Top Navbar */}
 
                   {/* Main Content */}
-                  <main className="flex-1 bg-dark-8  overflow-auto justify-items-center">{children}</main>
+                  <main className="flex-1 bg-background  overflow-auto justify-items-center">{children}</main>
                 </div>
               </div>
             </DateProvider>

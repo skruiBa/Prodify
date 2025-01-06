@@ -6,17 +6,18 @@ import { formatDate, getDayName } from '@/app/lib/helper';
 import { useDate } from '@/app/lib/dateContext';
 import PrimaryButton from '../PrimaryButton';
 import SecondaryButton from '../SecondaryButton';
+import InputField from '../InputField';
 
 export default function TasksTopNavbar({}) {
   const { currentDate, updateCurrentDate } = useDate();
   const pathname = usePathname();
 
   return (
-    <nav className="bg-backgroundlight h-20 w-full flex items-center justify-between px-6 z-20">
+    <nav className="bg-backgroundlight h-20 w-full flex items-center justify-start gap-12 px-8 z-20">
       {/* Left section */}
-      <div className=" items-center relative">
-        <label htmlFor="date" className="cursor-pointer">
-          📅
+      <div className="items-center relative ">
+        <label htmlFor="date" className="text-white/60 cursor-pointer">
+          Date
         </label>
         <input
           type="date"
@@ -31,15 +32,7 @@ export default function TasksTopNavbar({}) {
           }}
         />
       </div>
-
-      {/* Center section */}
-      <div className="flex flex-row items-center gap-4">
-        <PrimaryButton onClick={() => updateCurrentDate(new Date())}>Today</PrimaryButton>
-        <DateNavigator currentDate={currentDate} />
-      </div>
-
-      {/* Right section */}
-      <div>{/* <PrimaryButton onClick={() => {}}></PrimaryButton> */}</div>
+      <DateNavigator currentDate={currentDate} />
     </nav>
   );
 }
@@ -47,7 +40,7 @@ export default function TasksTopNavbar({}) {
 const DateNavigator = ({}) => {
   const { currentDate, updateCurrentDate } = useDate();
 
-  const dayClassName = 'text-center';
+  const dayClassName = 'text-center h-full w-auto flex flex-col items-center justify-center';
   const offDayClassName = 'text-white/50';
 
   const generateFutureDates = (startDate, daysCount) => {
@@ -59,7 +52,7 @@ const DateNavigator = ({}) => {
     }
     return dates;
   };
-  const futureDates = generateFutureDates(currentDate, 5); // Get 5 future dates
+  const futureDates = generateFutureDates(currentDate, 2); // Get future dates
 
   const onClick = (date) => {
     console.log('Date clicked:', date);
@@ -67,8 +60,7 @@ const DateNavigator = ({}) => {
   };
 
   return (
-    // start
-    <div className="flex flex-row  items-center gap-8">
+    <div className="flex flex-row items-center gap-8">
       {/* Middle (Current Day) */}
       <div className={dayClassName}>
         <button onClick={() => onClick(currentDate)}>
@@ -89,11 +81,13 @@ const DateNavigator = ({}) => {
 
 const DateButton = ({ date, className, onClick }) => {
   return (
-    <div className={className}>
-      <button onClick={() => onClick(date)}>
+    <div className={`${className} flex flex-col items-center`}>
+      <button className="flex flex-col items-center" onClick={() => onClick(date)}>
         <p>{getDayName(date)}</p>
         <p>{formatDate(date)}</p>
       </button>
+      {/* Primary color box */}
+      <div className="w-full h-1 mt-1  bg-primary"></div>
     </div>
   );
 };

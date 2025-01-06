@@ -13,36 +13,26 @@ import {
   onSnapshot
 } from 'firebase/firestore';
 
-export const fsAddTask = async (userId, task) => {
+export const fsAddTask = async (userId, task, date) => {
   try {
-    const taskRef = collection(db, `users/${userId}/tasks`);
+    const taskRef = collection(db, `users/${userId}/tasks/${date}/tasks`);
     await addDoc(taskRef, task);
     console.log('Task added successfully');
   } catch (error) {
     console.error('Error adding task:', error);
   }
 };
-
-export const fsUpdateTask = async (userId, taskId, updates) => {
+export const fsTasksSnapshot = (userId, date, callback) => {
   try {
-    const taskRef = doc(db, `users/${userId}/tasks/${taskId}`);
-    await updateDoc(taskRef, updates);
-    console.log('Task updated successfully:', updates);
-  } catch (error) {
-    console.error('Error updating task:', error.message);
-    throw error;
-  }
-};
-
-export const fsListenToTasksByDate = (userId, date, callback) => {
-  try {
-    const tasksRef = collection(db, `users/${userId}/tasks`);
+    const tasksRef = collection(db, `users/${userId}/tasks/${date}/tasks`);
     const q = query(tasksRef, where('date', '==', date));
 
     return onSnapshot(
       q,
       (snapshot) => {
         const tasks = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        console.log('Tasks updated:', tasks);
+
         callback(tasks); // Pass updated tasks to the callback
       },
       (error) => {
@@ -55,9 +45,20 @@ export const fsListenToTasksByDate = (userId, date, callback) => {
   }
 };
 
-export const fsDeleteTask = async (userId, taskId) => {
+export const fsUpdateTask = async (userId, taskId, updates, date) => {
   try {
-    const taskRef = doc(db, `users/${userId}/tasks/${taskId}`);
+    const taskRef = doc(db, `users/${userId}/tasks/ ${date}/tasks/${taskId}`);
+    await updateDoc(taskRef, updates);
+    console.log('Task updated successfully:', updates);
+  } catch (error) {
+    console.error('Error updating task:', error.message);
+    throw error;
+  }
+};
+
+export const fsDeleteTask = async (userId, taskId, date) => {
+  try {
+    const taskRef = doc(db, `users/${userId}/tasks/${date}/tasks/${taskId}`);
     await deleteDoc(taskRef);
   } catch (error) {
     console.error('Error deleting task:', error);

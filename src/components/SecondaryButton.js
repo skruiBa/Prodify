@@ -1,8 +1,10 @@
-function SecondaryButton({ children, onClick }) {
+function SecondaryButton({ children, onClick, type = 'button', className }) {
   return (
     <button
       onClick={onClick}
-      className="flex flex-row items-center justify-center font-semibold bg-primary/10 text-white rounded-md p-2 gap-2"
+      type={type} // Add the type prop
+      className={`flex flex-row items-center justify-center h-12  w-32 
+      font-semibold bg-primary/10 text-white  p-2 gap-2 ${className}`}
     >
       {children}
     </button>

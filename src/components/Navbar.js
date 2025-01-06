@@ -69,7 +69,7 @@ function NavLinks() {
   ];
 
   return (
-    <div className="flex flex-col gap-4 flex-1">
+    <div className="flex flex-col gap-4 flex-1 mt-2">
       {links.map(({ href, icon, label }) => (
         <NavbarLink key={href} href={href}>
           {icon}
