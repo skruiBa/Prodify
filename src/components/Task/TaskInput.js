@@ -1,12 +1,23 @@
 import PrimaryButton from '../PrimaryButton';
 import SecondaryButton from '../SecondaryButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import InputField from '../InputField';
-export default function TaskInput({ onSubmit }) {
+export default function TaskInput({ onSubmit, task, onUpdate, onCancel }) {
   const [title, setTitle] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [minitask, setMinitask] = useState('');
   const [miniTasks, setMiniTasks] = useState([]);
+
+  // Sync state with the `task` prop when it changes
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title || '');
+      setSelectedTime(task.time || '');
+      setMiniTasks(task.miniTasks.tasks.map((task) => task.title) || []);
+    } else {
+      console.log('nothing');
+    }
+  }, [task]);
 
   const addMinitask = () => {
     if (minitask.trim() === '') return;
@@ -22,33 +33,55 @@ export default function TaskInput({ onSubmit }) {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (title.trim() === '') return;
-    console.log('SUBMITTING-----------------');
-
-    console.log('Title:', title);
-    console.log('Time:', selectedTime);
-    console.log('Minitasks:', miniTasks);
 
     const taskData = {
       title,
       time: selectedTime,
-      miniTasks,
+      miniTasks: {
+        tasks: miniTasks.map((task) => ({
+          title: task, // Use the string as the title
+          completed: false // Initialize completed as false
+        }))
+      },
       completed: false
     };
 
-    onSubmit(taskData);
+    if (task) {
+      onUpdate(task.id, taskData); // Update task if editing
+    } else {
+      onSubmit(taskData); // Add new task
+    }
 
-    // Reset form fields
+    clearForm();
+    onCancel?.(); // Close editing if applicable
+  };
+
+  const clearForm = () => {
     setTitle('');
     setSelectedTime('');
     setMiniTasks([]);
+    setMinitask('');
   };
 
   {
     return (
       <form onSubmit={handleFormSubmit} className="w-full mx-auto ">
-        <PrimaryButton type="submit" className="mb-2">
-          Add Task
-        </PrimaryButton>
+        <div className="flex flex-row gap-4">
+          <PrimaryButton type="submit" className="mb-2">
+            {task ? 'Update Task' : 'Add Task'}
+          </PrimaryButton>
+          {task && (
+            <SecondaryButton
+              onClick={() => {
+                clearForm();
+                onCancel?.();
+              }}
+              className="mb-2"
+            >
+              Cancel
+            </SecondaryButton>
+          )}
+        </div>
         <div className="flex flex-col gap-2 mx-auto w-full ">
           {/* Additional Options */}
 

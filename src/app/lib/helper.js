@@ -10,9 +10,9 @@ export const formatDate = (date) => {
   if (!date) return null;
 
   const dateReturn = date.toLocaleDateString('en-FI', {
-    day: 'numeric',
-    month: 'numeric',
-    year: 'numeric'
+    day: '2-digit'
+    // month: 'numeric',
+    // year: 'numeric'
   });
 
   return dateReturn;
@@ -26,4 +26,14 @@ export const formatDateForFirebase = (date) => {
   return `${year}-${month}-${day}`;
 };
 
-export const getDayName = (date) => new Intl.DateTimeFormat('en-FI', { weekday: 'long' }).format(date);
+export const getDayName = (date) => new Intl.DateTimeFormat('en-FI', { weekday: 'short' }).format(date);
+
+export function debounce(func, delay) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+}

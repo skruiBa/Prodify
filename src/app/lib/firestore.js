@@ -47,7 +47,8 @@ export const fsTasksSnapshot = (userId, date, callback) => {
 
 export const fsUpdateTask = async (userId, taskId, updates, date) => {
   try {
-    const taskRef = doc(db, `users/${userId}/tasks/ ${date}/tasks/${taskId}`);
+    const taskRef = doc(db, `users/${userId}/tasks/${date}/tasks/${taskId}`);
+    console.log(taskRef);
     await updateDoc(taskRef, updates);
     console.log('Task updated successfully:', updates);
   } catch (error) {

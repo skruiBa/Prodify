@@ -32,14 +32,14 @@ export default function RootLayout({ children }) {
               {/* Main Layout */}
               <div className="h-screen w-screen flex">
                 {/* Left Sidebar */}
-                <Navbar />
+                {/* <Navbar /> */}
 
                 {/* Right Section */}
                 <div className="flex flex-col flex-1">
                   {/* Top Navbar */}
 
                   {/* Main Content */}
-                  <main className="flex-1 bg-background  overflow-auto justify-items-center">{children}</main>
+                  <main className="flex-1 overflow-auto bg-background  justify-items-center">{children}</main>
                 </div>
               </div>
             </DateProvider>
