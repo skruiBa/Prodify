@@ -2,31 +2,24 @@
 
 import { useAuth } from '@/app/lib/authContext';
 import { logout } from '@/app/lib/auth';
-import NavbarLink from './NavbarLink';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
-import HomeIcon from '@/assets/home.svg';
-import TasksIcon from '@/assets/tasks.svg';
-import VisionIcon from '@/assets/vision.svg';
-import ImproveIcon from '@/assets/improve.svg';
 import LoginIcon from '@/assets/login.svg';
 import LogoutIcon from '@/assets/logout.svg';
-import SettingsIcon from '@/assets/settings.svg';
-
-import tailwindConfig from '../../tailwind.config';
-
-const primaryColor = tailwindConfig.theme.extend.colors.primary;
+import HamburgerIcon from './HamburgerIcon';
 
 export default function Navbar() {
   const { user } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = async (e) => {
     e.preventDefault();
     console.log('Logging out...');
     try {
       await logout();
+      window.location.href = '/login';
     } catch (error) {
       console.error('Logout failed:', error);
     }
@@ -35,17 +28,38 @@ export default function Navbar() {
   return (
     <>
       {/* Desktop Navbar */}
-      <nav className="hidden md:flex bg-backgroundlight text-white w-52 h-full flex-col p-4 z-10 top-0 left-0">
+      <nav className="hidden lg:flex   bg-transparent text-white  w-full  z-30 absolute ">
         {/* Logo Section */}
-        <NavLogoSection />
+        <div className="absolute top-0 left-0 p-4">
+          <NavLogoSection />
+        </div>
         {/* Links */}
-        <NavLinks />
+
         {/* Login/Logout */}
-        <NavAuthLinks user={user} onLogout={handleLogout} />
-        );
+        <div className="absolute top-0 right-0 p-4">
+          <NavAuthLinks user={user} onLogout={handleLogout} />
+        </div>
       </nav>
 
       {/* Mobile Navbar */}
+      <nav className="flex lg:hidden bg-transparent text-white  w-full  z-30 absolute">
+        {/* Hamburger icon */}
+        <button className="absolute top-0 right-0 p-4">
+          <HamburgerIcon
+            onClick={() => {
+              setIsOpen(!isOpen);
+              console.log('isOpen:', isOpen);
+            }}
+          />
+        </button>
+        {isOpen && (
+          <div className="w-full justify-center justify-items-center  bg-backgroundlight p-12">
+            <NavLogoSection />
+
+            <NavAuthLinks user={user} onLogout={handleLogout} />
+          </div>
+        )}
+      </nav>
     </>
   );
 }
@@ -60,35 +74,30 @@ function NavLogoSection({}) {
   );
 }
 
-function NavLinks() {
-  const links = [
-    { href: '/tasks', icon: <TasksIcon />, label: 'Tasks' },
-    { href: '/vision', icon: <VisionIcon />, label: 'Vision' },
-    { href: '/improve', icon: <ImproveIcon />, label: 'Improve' },
-    { href: '/settings', icon: <SettingsIcon />, label: 'Settings' }
-  ];
-
-  return (
-    <div className="flex flex-col gap-4 flex-1 mt-2">
-      {links.map(({ href, icon, label }) => (
-        <NavbarLink key={href} href={href}>
-          {icon}
-          {label}
-        </NavbarLink>
-      ))}
-    </div>
-  );
-}
 function NavAuthLinks({ user, onLogout }) {
   return user ? (
     <NavbarLink href="/login" onClick={onLogout}>
-      <LogoutIcon fill={primaryColor} />
+      <LogoutIcon className="fill-textColor " />
       Logout
     </NavbarLink>
   ) : (
     <NavbarLink href="/login">
-      <LoginIcon fill={primaryColor} />
+      <LoginIcon className="fill-textColor " />
       Login
     </NavbarLink>
+  );
+}
+function NavbarLink({ href, onClick, children }) {
+  const pathname = usePathname();
+
+  return (
+    <Link
+      className={`flex font-semibold text-white/50 flex-row items-end p-2 gap-4 hover:text-primary 
+     `}
+      href={href}
+      onClick={onClick}
+    >
+      {children}
+    </Link>
   );
 }

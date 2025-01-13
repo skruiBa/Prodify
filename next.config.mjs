@@ -6,8 +6,7 @@ const nextConfig = {
       use: ['@svgr/webpack']
     });
     return config;
-  },
-  reactStrictMode: true
+  }
 };
 
 export default nextConfig;

@@ -2,17 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/lib/authContext';
-import { formatDate, formatTime, debounce, formatDateForFirebase } from '@/app/lib/helper';
+import { formatDateForFirebase } from '@/app/lib/helper';
 import { fsTasksSnapshot, fsAddTask, fsUpdateTask, fsDeleteTask } from '@/app/lib/firestore';
-import PrimaryButton from '@/components/PrimaryButton';
-import SecondaryButton from '@/components/SecondaryButton';
+
 import { useDate } from '@/app/lib/dateContext';
 import TaskInput from './TaskInput';
 import PageWrapper from '../PageWrapper';
-import TertiaryButton from '../TertiaryButton';
+
+import Checkbox from '@/components/Checkbox';
+import Submenu from '@/components/Submenu';
+import ClockIcon from '@/assets/clock.svg';
+
 export default function TaskList() {
   const [tasks, setTasks] = useState([]);
-  const [editingTask, setEditingTask] = useState(null); // Task being edited
   const { currentDate, updateCurrentDate } = useDate();
   const { user } = useAuth();
 
@@ -30,8 +32,15 @@ export default function TaskList() {
   }, [currentDate, user]);
 
   const handleAddTask = (taskData) => {
+    if (!user) {
+      alert('Please sign in to add tasks.');
+      return;
+    }
     taskData.date = formatDateForFirebase(currentDate); // add date
     console.log(taskData); // debug
+
+    // Add the task to Firestore and track its ID
+
     fsAddTask(user.uid, taskData, taskData.date);
   };
 
@@ -41,33 +50,26 @@ export default function TaskList() {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
   };
 
-  const handleUpdateTask = (taskId, updatedData) => {
-    console.log('Updated task ID with data:', taskId, updatedData);
-    fsUpdateTask(user.uid, taskId, updatedData, formatDateForFirebase(currentDate));
-    setTasks((prevTasks) => prevTasks.map((task) => (task.id === taskId ? { ...task, ...updatedData } : task)));
+  const handleUpdateTask = (taskId, key, value) => {
+    // Extract the actual value from the object
+    const extractedValue = value[key];
+
+    console.log('Updating task with ID:', taskId, 'and key:', key, 'to value:', extractedValue);
+    fsUpdateTask(user.uid, taskId, { [key]: extractedValue }, formatDateForFirebase(currentDate));
   };
 
   return (
     <PageWrapper>
       {/* Task Input */}
-      <TaskInput
-        onSubmit={handleAddTask}
-        task={editingTask}
-        onUpdate={handleUpdateTask}
-        onCancel={() => setEditingTask(null)}
-      />
+      <TaskInput onSubmit={handleAddTask} />
 
-      {/* Task List */}
-      <ul className="flex flex-col gap-2 w-full mx-auto mt-14 ">
+      {/* TaskList populated with TaskItems */}
+      <ul className="flex flex-col gap-2 w-full h-full mx-auto   ">
         {tasks.map((task) => (
           <TaskItem
             key={task.id}
             task={task}
-            onUpdate={() => {
-              console.log('Editing task with ID:', task.id);
-
-              setEditingTask(task);
-            }} // Pass task to edit
+            onUpdate={(key, value) => handleUpdateTask(task.id, key, value)}
             onDelete={() => handleDeleteTask(task.id)}
           />
         ))}
@@ -79,59 +81,64 @@ export default function TaskList() {
 const TaskItem = ({ task, onUpdate, onDelete }) => {
   const { currentDate, updateCurrentDate } = useDate();
   const { user } = useAuth();
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleComplete = (e) => {
-    const updatedCompleted = e.target.checked;
-    fsUpdateTask(user.uid, task.id, { completed: updatedCompleted }, formatDateForFirebase(currentDate));
+    fsUpdateTask(user.uid, task.id, { completed: e.target.checked }, formatDateForFirebase(currentDate));
   };
-  const toggleExpand = () => setIsExpanded(!isExpanded);
 
   return (
     <>
-      <div className="flex flex-col bg-backgroundlight w-full items-start justify-between p-4 gap-4">
+      <div className={`w-full relative animate-fade-in `}>
         {/* Task Row */}
+        <div
+          className="flex flex-row   w-full h-20 mx-auto gap-4 
+          items-center justify-start mb-4 bg-backgroundlight p-4
+            shadow-md shadow-background relative"
+        >
+          {/* Custom Color Task */}
+          <div
+            className={`absolute top-0 left-0 h-full w-2 `}
+            style={{ backgroundColor: task.color || '#DF728B' }}
+          ></div>
 
-        <div className="flex w-full flex-row items-center justify-between h-8">
-          <div className="flex-1 flex-row flex gap-4 items-center">
-            {/* Checkbox */}
-            <input type="checkbox" className="custom-checkbox" onChange={handleComplete} checked={task.completed} />
-
-            <label className={`bg-transparent   ${task.completed ? 'line-through opacity-50' : ''}`}>
-              {task.title}
+          {/* Content */}
+          <div className="flex flex-row pl-6 gap-4 items-center relative flex-1 ">
+            {/* Checkbox & Title */}
+            <Checkbox checked={task.completed} onChange={handleComplete} color={task.color} />
+            <label className={`bg-transparent  ${task.completed ? 'opacity-50' : ''}`}>
+              {task.title.length > 20 ? `${task.title.substring(0, 20)}...` : task.title}
             </label>
-            {/* Expand/Collapse Button */}
-            {task.miniTasks && task.miniTasks.tasks.length > 0 && (
-              <TertiaryButton onClick={toggleExpand}>{isExpanded ? ' ⬆' : ' ⬇'}</TertiaryButton>
-            )}
           </div>
 
-          <div className="flex flex-row items-center gap-4">
-            {/* Time */}
-            <label className="bg-transparent">{task.time}</label>
+          {/* Time */}
+          <div className="flex flex-row gap-2">
+            {/* Conditional clockicon */}
+            {task.time && <ClockIcon className="hover:fill-primary fill-textColor" />}
+            <label className={`bg-transparent ${task.completed ? ' opacity-50' : ''}`}>{task.time}</label>
+          </div>
 
-            {/* Edit & Delete buttons */}
-            <TertiaryButton className="bg-transparent" onClick={() => onUpdate(task)}>
-              Edit
-            </TertiaryButton>
-            <TertiaryButton className="bg-transparent" onClick={onDelete}>
-              Delete
-            </TertiaryButton>
+          {/* Submenu */}
+          <div className="flex flex-row items-center gap-4 relative ">
+            <Submenu
+              initialValues={{
+                time: task.time || '',
+                color: task.color || '#DF728B'
+              }}
+              items={[
+                { key: 'time', label: 'Time', modalTitle: 'Set Time', inputType: 'time' },
+                { key: 'color', label: 'Color', modalTitle: 'Set Color', inputType: 'color' },
+                { key: 'delete', label: 'Delete', modalTitle: 'Delete Task', inputType: 'none' }
+              ]}
+              onItemSave={(key, value) => {
+                if (key === 'delete') {
+                  onDelete(); // Trigger delete in parent
+                } else {
+                  onUpdate(key, value); // Pass key and value to parent
+                }
+              }}
+            />
           </div>
         </div>
-
-        {/* Expanded Mini-Tasks Section */}
-        {isExpanded && (
-          <div className="w-full bg-backgroundlight p-4 rounded-md">
-            <ul className="list-disc list-inside">
-              {task.miniTasks.tasks.map((task, index) => (
-                <li key={index} className={`${task.completed ? 'line-through opacity-50' : ''}`}>
-                  {task.title}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
     </>
   );

@@ -14,7 +14,6 @@ export const signInAnonymouslyUser = async () => {
 };
 
 export const signIn = async (email, password) => {
-  console.log('signIn called with email:', email, 'and password:', password);
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     console.log('User signed in:', userCredential.user);
@@ -26,7 +25,6 @@ export const signIn = async (email, password) => {
 };
 
 export const createAccount = async (email, password) => {
-  console.log('signUp called with email:', email, 'and password:', password);
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     console.log('Account created successfully:', userCredential.user);

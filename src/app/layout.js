@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import { AuthProvider } from './lib/authContext';
 import { StrictMode } from 'react';
 import { DateProvider } from './lib/dateContext';
+import Footer from '@/components/Footer';
 
 const comfortaa = localFont({
   src: './fonts/Comfortaa-VariableFont_wght.ttf',
@@ -25,23 +26,18 @@ export default function RootLayout({ children }) {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </head>
 
-        <body className={`${comfortaa.className}  antialiased bg-background flex h-screen`}>
+        <body className={`${comfortaa.className} antialiased bg-background flex h-screen`}>
           {/* Hooks and Providers */}
           <AuthProvider>
             <DateProvider>
               {/* Main Layout */}
-              <div className="h-screen w-screen flex">
-                {/* Left Sidebar */}
-                {/* <Navbar /> */}
+              <Navbar />
 
-                {/* Right Section */}
-                <div className="flex flex-col flex-1">
-                  {/* Top Navbar */}
+              {/* Main Content */}
+              <main className="flex flex-col w-full bg-background overflow-y-auto">{children}</main>
 
-                  {/* Main Content */}
-                  <main className="flex-1 overflow-auto bg-background  justify-items-center">{children}</main>
-                </div>
-              </div>
+              {/* Footer */}
+              {/* <Footer /> */}
             </DateProvider>
           </AuthProvider>
         </body>

@@ -1,34 +1,10 @@
-import PrimaryButton from '../PrimaryButton';
-import SecondaryButton from '../SecondaryButton';
-import { useEffect, useState } from 'react';
-import InputField from '../InputField';
-export default function TaskInput({ onSubmit, task, onUpdate, onCancel }) {
+import { useState } from 'react';
+import Submenu from '../Submenu';
+
+export default function TaskInput({ onSubmit, task, onCancel }) {
   const [title, setTitle] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
-  const [minitask, setMinitask] = useState('');
-  const [miniTasks, setMiniTasks] = useState([]);
-
-  // Sync state with the `task` prop when it changes
-  useEffect(() => {
-    if (task) {
-      setTitle(task.title || '');
-      setSelectedTime(task.time || '');
-      setMiniTasks(task.miniTasks.tasks.map((task) => task.title) || []);
-    } else {
-      console.log('nothing');
-    }
-  }, [task]);
-
-  const addMinitask = () => {
-    if (minitask.trim() === '') return;
-
-    setMiniTasks([...miniTasks, minitask.trim()]);
-    setMinitask('');
-  };
-
-  const removeMinitask = (indexToRemove) => {
-    setMiniTasks(miniTasks.filter((_, index) => index !== indexToRemove));
-  };
+  const [time, setTime] = useState('');
+  const [color, setColor] = useState('');
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -36,93 +12,63 @@ export default function TaskInput({ onSubmit, task, onUpdate, onCancel }) {
 
     const taskData = {
       title,
-      time: selectedTime,
-      miniTasks: {
-        tasks: miniTasks.map((task) => ({
-          title: task, // Use the string as the title
-          completed: false // Initialize completed as false
-        }))
-      },
+      time: time,
+      color: color.length > 2 ? color : null, // Store valid color or null
       completed: false
     };
 
-    if (task) {
-      onUpdate(task.id, taskData); // Update task if editing
-    } else {
-      onSubmit(taskData); // Add new task
-    }
-
+    onSubmit?.(taskData);
     clearForm();
     onCancel?.(); // Close editing if applicable
   };
 
   const clearForm = () => {
     setTitle('');
-    setSelectedTime('');
-    setMiniTasks([]);
-    setMinitask('');
+    setTime('');
+    setColor('');
+  };
+  const handleItemSave = (key, value) => {
+    // Extract the actual value from the object
+    const extractedValue = value[key];
+
+    console.log('Updating TaskInput with key:', key, 'to value:', extractedValue);
+
+    if (key === 'time') setTime(extractedValue);
+    if (key === 'color') setColor(extractedValue);
   };
 
   {
     return (
-      <form onSubmit={handleFormSubmit} className="w-full mx-auto ">
-        <div className="flex flex-row gap-4">
-          <PrimaryButton type="submit" className="mb-2">
-            {task ? 'Update Task' : 'Add Task'}
-          </PrimaryButton>
-          {task && (
-            <SecondaryButton
-              onClick={() => {
-                clearForm();
-                onCancel?.();
-              }}
-              className="mb-2"
-            >
-              Cancel
-            </SecondaryButton>
-          )}
-        </div>
-        <div className="flex flex-col gap-2 mx-auto w-full ">
-          {/* Additional Options */}
-
-          <div className="flex flex-col bg-backgroundlight w-full h-auto items-start justify-start gap-6  p-8 ">
-            {/* Title */}
-
-            <InputField label="Task Name" id="task-name" onChange={(e) => setTitle(e.target.value)} value={title} />
-
-            {/* Time */}
-            <InputField
-              label="Time"
-              id="time"
-              type="time"
-              onChange={(e) => setSelectedTime(e.target.value)}
-              value={selectedTime}
+      <>
+        <form onSubmit={handleFormSubmit} className="w-full relative mt-16">
+          <div
+            className="flex flex-row w-full h-20 mx-auto gap-4 
+          items-center justify-between mb-4 bg-backgroundlight p-4
+          border shadow-md shadow-background"
+          >
+            <input
+              type="text"
+              className="w-full text-xl bg-transparent outline-none"
+              placeholder="What are you going to do today?"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
-
-            {/* Minitask input*/}
-            <div className="flex flex-row items-end w-full gap-4">
-              <InputField
-                label="Minitasks"
-                id="minitask"
-                placeholder="Minitask name"
-                value={minitask}
-                onChange={(e) => setMinitask(e.target.value)}
+            <div className="relative">
+              <Submenu
+                initialValues={{
+                  color: '#DF728B'
+                }}
+                // ref={submenuRef} // Use ref to access submenu methods
+                items={[
+                  { key: 'time', label: 'Time', modalTitle: 'Set Time', inputType: 'time' },
+                  { key: 'color', label: 'Color', modalTitle: 'Set Color', inputType: 'color' }
+                ]}
+                onItemSave={handleItemSave}
               />
-              <SecondaryButton onClick={addMinitask}>Add</SecondaryButton>
-            </div>
-
-            {/* Minitasks */}
-            <div className="flex flex-col items-start justify-start gap-2 w-full">
-              {miniTasks.map((task, index) => (
-                <div key={index} className="flex flex-row items-center gap-4 w-full">
-                  <input type="text" className="bg-transparent flex-1 mx-5" value={task} readOnly />
-                  <SecondaryButton onClick={() => removeMinitask(index)}>re</SecondaryButton>
-                </div>
-              ))}
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </>
     );
   }
 }

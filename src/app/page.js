@@ -1,15 +1,22 @@
-import Button from '@/components/Button';
-import PageWrapper from '@/components/PageWrapper';
+'use client';
+
+import { useState, useEffect } from 'react';
+import TasksTopNavbar from '@/components/Task/TasksTopNavbar';
+import TaskList from '@/components/Task/TaskList';
+import { useDate } from './lib/dateContext';
 
 export default function Home() {
+  const { currentDate, updateCurrentDate } = useDate();
+
+  // Set current date on client-side after hydration
+  useEffect(() => {
+    updateCurrentDate(new Date());
+  }, []);
+
   return (
     <>
-      <PageWrapper>
-        <h1 className="text-4xl font-bold">Habit Tracker</h1>
-        <p className="text-2xl font-bold">"YOU CAN DO ANYTHING"</p>
-
-        <Button>Get Started</Button>
-      </PageWrapper>
+      <TasksTopNavbar></TasksTopNavbar>
+      <TaskList />
     </>
   );
 }
