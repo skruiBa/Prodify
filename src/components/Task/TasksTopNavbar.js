@@ -82,7 +82,7 @@ const DateNavigator = () => {
           <DateButton
             key={index}
             date={date}
-            className={date.toDateString() === currentDate.toDateString() ? 'text-textColor' : 'text-textColor/50'}
+            className={date.toDateString() === currentDate.toDateString() ? 'text-textColor' : 'text-textColor/80'}
             boxClassname={date.toDateString() === currentDate.toDateString() ? 'bg-primary h-4' : 'bg-primary/50'}
             onClick={() => onClick(date)}
           />
