@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation';
 import LoginIcon from '@/assets/login.svg';
 import LogoutIcon from '@/assets/logout.svg';
 import HamburgerIcon from './HamburgerIcon';
+import Image from 'next/image';
 
 export default function Navbar() {
   const { user } = useAuth();
@@ -48,7 +49,7 @@ export default function Navbar() {
           <HamburgerIcon
             onClick={() => {
               setIsOpen(!isOpen);
-              console.log('isOpen:', isOpen);
+              // console.log('isOpen:', isOpen);
             }}
           />
         </button>
@@ -67,7 +68,8 @@ export default function Navbar() {
 function NavLogoSection({}) {
   return (
     <Link href="/">
-      <div className="flex items-center mb-6">
+      <div className="flex items-center mb-6 bg-background p-4 ">
+        <Image src="/favicon.png" alt="Logo" width={45} height={45} />
         <h1 className="text-2xl font-bold">PRODIFY</h1>
       </div>
     </Link>

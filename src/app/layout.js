@@ -2,7 +2,6 @@ import localFont from 'next/font/local';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import { AuthProvider } from './lib/authContext';
-import { StrictMode } from 'react';
 import { DateProvider } from './lib/dateContext';
 import Footer from '@/components/Footer';
 
@@ -19,29 +18,28 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <StrictMode>
-      <html lang="en">
-        <head>
-          <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-        </head>
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.png" />
+      </head>
 
-        <body className={`${comfortaa.className} antialiased bg-background flex h-screen`}>
-          {/* Hooks and Providers */}
-          <AuthProvider>
-            <DateProvider>
-              {/* Main Layout */}
-              <Navbar />
+      <body className={`${comfortaa.className} antialiased bg-background flex h-screen`}>
+        {/* Hooks and Providers */}
+        <AuthProvider>
+          <DateProvider>
+            {/* Main Layout */}
+            <Navbar />
 
-              {/* Main Content */}
-              <main className="flex flex-col w-full bg-background overflow-y-auto">{children}</main>
+            {/* Main Content */}
+            <main className="flex flex-col w-full bg-background overflow-y-auto">{children}</main>
 
-              {/* Footer */}
-              {/* <Footer /> */}
-            </DateProvider>
-          </AuthProvider>
-        </body>
-      </html>
-    </StrictMode>
+            {/* Footer */}
+            {/* <Footer /> */}
+          </DateProvider>
+        </AuthProvider>
+      </body>
+    </html>
   );
 }

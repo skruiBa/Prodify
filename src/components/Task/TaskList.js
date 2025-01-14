@@ -24,7 +24,7 @@ export default function TaskList() {
     const formattedDate = formatDateForFirebase(currentDate);
     const unsubscribe = fsTasksSnapshot(user.uid, formattedDate, setTasks);
 
-    console.log('Listening to tasks for date:', formatDateForFirebase(currentDate));
+    // console.log('Listening to tasks for date:', formatDateForFirebase(currentDate));
 
     return () => {
       if (typeof unsubscribe === 'function') unsubscribe();
@@ -37,7 +37,7 @@ export default function TaskList() {
       return;
     }
     taskData.date = formatDateForFirebase(currentDate); // add date
-    console.log(taskData); // debug
+    // console.log(taskData); // debug
 
     // Add the task to Firestore and track its ID
 
@@ -45,7 +45,7 @@ export default function TaskList() {
   };
 
   const handleDeleteTask = (taskId) => {
-    console.log('Deleting task with ID:', taskId);
+    // console.log('Deleting task with ID:', taskId);
     fsDeleteTask(user.uid, taskId, formatDateForFirebase(currentDate)); // add date
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
   };
@@ -54,7 +54,7 @@ export default function TaskList() {
     // Extract the actual value from the object
     const extractedValue = value[key];
 
-    console.log('Updating task with ID:', taskId, 'and key:', key, 'to value:', extractedValue);
+    // console.log('Updating task with ID:', taskId, 'and key:', key, 'to value:', extractedValue);
     fsUpdateTask(user.uid, taskId, { [key]: extractedValue }, formatDateForFirebase(currentDate));
   };
 

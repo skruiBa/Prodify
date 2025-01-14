@@ -5,7 +5,7 @@ import { signInAnonymously, signOut, signInWithEmailAndPassword, createUserWithE
 export const signInAnonymouslyUser = async () => {
   try {
     const userCredential = await signInAnonymously(auth);
-    console.log('Anonymous user signed in:', userCredential.user);
+    // console.log('Anonymous user signed in:', userCredential.user);
     return userCredential.user; // Returns the authenticated user
   } catch (error) {
     console.error('Error during anonymous sign-in:', error.message);
@@ -16,7 +16,7 @@ export const signInAnonymouslyUser = async () => {
 export const signIn = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    console.log('User signed in:', userCredential.user);
+    // console.log('User signed in:', userCredential.user);
     return userCredential.user; // Returns the authenticated user
   } catch (error) {
     console.error('Error during sign-in:', error.message);
@@ -27,7 +27,7 @@ export const signIn = async (email, password) => {
 export const createAccount = async (email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    console.log('Account created successfully:', userCredential.user);
+    // console.log('Account created successfully:', userCredential.user);
     return userCredential.user; // Returns the authenticated user
   } catch (error) {
     console.error('Error during sign-up:', error.message);
@@ -38,7 +38,7 @@ export const createAccount = async (email, password) => {
 export const logout = async () => {
   try {
     await signOut(auth);
-    console.log('User signed out successfully');
+    // console.log('User signed out successfully');
   } catch (error) {
     console.error('Error during logout:', error.message);
   }

@@ -31,7 +31,7 @@ export default function TaskInput({ onSubmit, task, onCancel }) {
     // Extract the actual value from the object
     const extractedValue = value[key];
 
-    console.log('Updating TaskInput with key:', key, 'to value:', extractedValue);
+    // console.log('Updating TaskInput with key:', key, 'to value:', extractedValue);
 
     if (key === 'time') setTime(extractedValue);
     if (key === 'color') setColor(extractedValue);

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const HamburgerIcon = ({ onClick }) => {
   return (
-    <StyledWrapper>
+    <StyledWrapper className="scale-50">
       <label className="burger" htmlFor="burger">
         <input type="checkbox" id="burger" onClick={onClick} />
         <span />

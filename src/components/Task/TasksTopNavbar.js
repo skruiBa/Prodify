@@ -21,11 +21,11 @@ const DateNavigator = () => {
   // Update maxDates based on screen size
   useEffect(() => {
     const updateMaxDates = () => {
-      if (window.innerWidth < 500) {
-        setMaxDates(2); // Show only 3 dates on small screens
-      } else if (window.innerWidth < 740) {
+      if (window.innerWidth < 580) {
+        setMaxDates(1); // Show only 3 dates on small screens
+      } else if (window.innerWidth < 850) {
         setMaxDates(3); // Show only 5 dates on medium screens
-      } else if (window.innerWidth < 1024) {
+      } else if (window.innerWidth < 1380) {
         setMaxDates(5); // Show only 5 dates on medium screens
       } else {
         setMaxDates(7); // Show all 7 dates on larger screens
@@ -64,12 +64,19 @@ const DateNavigator = () => {
   }, [currentDate, maxDates]);
 
   const onClick = (date) => {
-    console.log('Date clicked:', date);
+    // console.log('Date clicked:', date);
     updateCurrentDate(date); // Update the selected date
   };
 
   return (
     <div className="flex flex-row items-center justify-center gap-8 h-full">
+      <button
+        className="text-2xl"
+        onClick={() => updateCurrentDate(new Date(currentDate.getTime() - 24 * 60 * 60 * 1000))}
+      >
+        ←
+      </button>
+
       <div className="text-center h-full w-auto flex flex-row items-center justify-center gap-2">
         {futureDates.map((date, index) => (
           <DateButton
@@ -81,6 +88,12 @@ const DateNavigator = () => {
           />
         ))}
       </div>
+      <button
+        className="text-2xl"
+        onClick={() => updateCurrentDate(new Date(currentDate.getTime() + 24 * 60 * 60 * 1000))}
+      >
+        →
+      </button>
     </div>
   );
 };

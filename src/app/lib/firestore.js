@@ -34,7 +34,7 @@ export const fsTasksSnapshot = (userId, date, callback) => {
       q,
       (snapshot) => {
         const tasks = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        console.log('Tasks updated:', tasks);
+        // console.log('Tasks updated:', tasks);
 
         callback(tasks); // Pass updated tasks to the callback
       },
