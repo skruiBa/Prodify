@@ -106,7 +106,7 @@ const TaskItem = ({ task, onUpdate, onDelete }) => {
             {/* Checkbox & Title */}
             <Checkbox checked={task.completed} onChange={handleComplete} color={task.color} />
             <label className={`bg-transparent  ${task.completed ? 'opacity-50' : ''}`}>
-              {task.title.length > 20 ? `${task.title.substring(0, 20)}...` : task.title}
+              {task.title.length > 35 ? `${task.title.substring(0, 35)}...` : task.title}
             </label>
           </div>
 
