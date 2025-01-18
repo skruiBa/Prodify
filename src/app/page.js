@@ -10,7 +10,11 @@ export default function Home() {
 
   // Set current date on client-side after hydration
   useEffect(() => {
-    updateCurrentDate(new Date());
+    if (typeof window !== 'undefined') {
+      // This code only runs on the client side after hydration
+      updateCurrentDate(new Date());
+      console.log('Current Date:', currentDate);
+    }
   }, []);
 
   return (
