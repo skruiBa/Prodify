@@ -20,7 +20,7 @@ export const metadata = {
   title: 'Prodify',
   description: 'Handle your daily tasks with ease.',
   icons: {
-    icon: '/favicon.png' // Automatically handles favicon
+    icon: '/favicon.svg'
   }
 };
 

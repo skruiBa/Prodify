@@ -31,8 +31,8 @@ export default function Navbar() {
       {/* Desktop Navbar */}
       <nav className="hidden lg:flex   bg-transparent text-white  w-full  z-30 absolute ">
         {/* Logo Section */}
-        <div className="absolute top-0 left-0 p-4">
-          <NavLogoSection />
+        <div className="absolute top-0 left-0 p-8">
+          <Image src="/prodifytext.svg" alt="Logo" width={130} height={130} />
         </div>
         {/* Links */}
 
@@ -62,17 +62,6 @@ export default function Navbar() {
         )}
       </nav>
     </>
-  );
-}
-
-function NavLogoSection({}) {
-  return (
-    <Link href="/">
-      <div className="flex items-center mb-6 bg-background p-4 ">
-        <Image src="/favicon.png" alt="Logo" width={45} height={45} />
-        <h1 className="text-2xl font-bold">PRODIFY</h1>
-      </div>
-    </Link>
   );
 }
 
