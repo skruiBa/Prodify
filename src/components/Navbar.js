@@ -55,7 +55,7 @@ export default function Navbar() {
         </button>
         {isOpen && (
           <div className="w-full justify-center justify-items-center  bg-backgroundlight p-12">
-            <NavLogoSection />
+            <Image src="/prodifytext.svg" alt="Logo" width={130} height={130} />
 
             <NavAuthLinks user={user} onLogout={handleLogout} />
           </div>

@@ -10,6 +10,7 @@ export default function Submenu({ items, onItemSave, taskId, onReset, initialVal
   const [inputValues, setInputValues] = useState(initialValues || {});
   const modalRef = useRef(null);
 
+  // Close the modal when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -21,6 +22,8 @@ export default function Submenu({ items, onItemSave, taskId, onReset, initialVal
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isExpanded]);
+
+  // Initialize input values
   useEffect(() => {
     if (isExpanded && initialValues) {
       setInputValues(initialValues); // Populate with task's existing data
@@ -111,7 +114,7 @@ function InputModal({ title, inputType, inputValue, onInputChange, onCancel, onS
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onCancel]);
+  }, [onCancel, onSave]);
 
   return (
     <div

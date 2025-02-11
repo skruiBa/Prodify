@@ -13,9 +13,13 @@ export default function Home() {
     if (typeof window !== 'undefined') {
       // This code only runs on the client side after hydration
       updateCurrentDate(new Date());
-      console.log('Current Date:', currentDate);
     }
   }, []);
+
+  // Effect to log the current date whenever it changes
+  // useEffect(() => {
+  //   console.log('Current Date:', currentDate);
+  // }, [currentDate]);
 
   return (
     <>
